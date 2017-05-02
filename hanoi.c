@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "stack.h"
 
-#define NUM_DISKS 2
+#define NUM_DISKS 5
 #define NUM_TOWERS 3
 
 // ============================================================================
