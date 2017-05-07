@@ -71,16 +71,11 @@ void print_list(list_t *l) {
 int list_get(list_t *l, int index) {
     assert((list_size(l) > index) & (index >= 0));
     int ret;
-    int counter = 0;
     node_t *cur = l->first;
-    while (cur != NULL) {
-        if (counter == index) {
-            ret = cur->value;
-        }
+    for (int i = 0; i < index; i++) {
         cur = cur->next;
-        counter++;
     }
-    return ret;
+    return cur->value;
 }
 
 bool list_remove(list_t *l, int value) {
@@ -107,11 +102,11 @@ bool list_remove(list_t *l, int value) {
     }
 }
 
-bool is_ordered_list(list_t *l) {
+bool is_list_ascending_order(list_t *l) {
     node_t *cur = l->first;
     if (cur == NULL) { return true; }
     while (cur->next != NULL) {
-        if (cur->value >= cur->next->value) {
+        if (cur->value > cur->next->value) {
             return false;
         }
         cur = cur->next;

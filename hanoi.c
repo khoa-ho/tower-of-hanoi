@@ -11,14 +11,19 @@
 // Tower-related functions
 typedef stack_t tower_t;
 
+// Creates a tower
 tower_t* make_tower(void) {
     return make_stack();
 }
 
+// Frees the tower
 void free_tower(tower_t *src) {
     free_stack(src);
 }
 
+// Checks whether there is a valid move between the source
+// and destination tower
+// Rule: Player can't place a bigger disk on top of a smaller one
 bool has_valid_move(tower_t *src, tower_t *dest) {
     if (stack_size(src) == 0) {
         return false;
@@ -29,12 +34,15 @@ bool has_valid_move(tower_t *src, tower_t *dest) {
     }
 }
 
+// Moves a disk from the source to the destination tower
 void move_disk(tower_t *src, tower_t *dest) {
     stack_push(dest, stack_pop(src));
 }
 
+// Checks wheter the tower is complete (i.e. same size as the original
+// tower and disks are sorted in an ascending order)
 bool is_complete_tower(tower_t *src) {
-    return (stack_size(src) == NUM_DISKS) & is_ordered_stack(src);
+    return (stack_size(src) == NUM_DISKS) & is_stack_ascending_order(src);
 }
 
 // ============================================================================
@@ -44,6 +52,7 @@ typedef struct {
     int moves;
 } hanoi_t;
 
+// Makes a Tower of Hanoi game
 hanoi_t* make_hanoi(void) {
     hanoi_t* ret = (hanoi_t*) malloc(sizeof(hanoi_t));
     tower_t* t0 = make_tower();
@@ -58,6 +67,7 @@ hanoi_t* make_hanoi(void) {
     return ret;
 }
 
+// Frees a Tower of Hanoi game
 void free_hanoi(hanoi_t *game) {
     for (int i = 0; i < NUM_TOWERS; i++) {
         free_tower(game->towers[i]);
@@ -65,6 +75,8 @@ void free_hanoi(hanoi_t *game) {
     free(game);
 }
 
+// Checks wheter the game is won (i.e. a tower is complete, not
+// considering the original tower)
 bool is_won_game(hanoi_t *game) {
     bool ret = 0;
     for (int i = 1; i < NUM_TOWERS; i++) {
@@ -75,12 +87,14 @@ bool is_won_game(hanoi_t *game) {
 
 // ============================================================================
 // Rendering functions
+// Prints a string a number of times
 void print(char *str, int num) {
     for (int i = 0; i < num; i++) {
             printf(str);
     }   
 }
 
+// Prints a disk of the given size
 void print_disk(int disk) {
     int num_spcs = NUM_DISKS - disk;
     print(" ", num_spcs);
@@ -90,6 +104,7 @@ void print_disk(int disk) {
     print(" ", num_spcs);
 }
 
+// Prints the tower
 void print_tower(tower_t *t) {
     int num_disks = stack_size(t);
     for (int i = 0; i < NUM_DISKS - num_disks; i++) {
@@ -105,6 +120,7 @@ void print_tower(tower_t *t) {
     print("=", 2 * NUM_DISKS + 1);
 }
 
+// Prints the Tower of Hanoi game
 void print_hanoi(hanoi_t *game) {
     printf("Move: %d\n", game->moves);
     for (int i = 0; i < NUM_TOWERS; i++) {

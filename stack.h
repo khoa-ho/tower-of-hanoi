@@ -14,7 +14,7 @@ typedef list_t stack_t;
 // Creates a stack
 stack_t* make_stack(void);
 
-// Frees a stack
+// Frees the stack
 void free_stack(stack_t *st);
 
 // Returns the stack's size
@@ -37,4 +37,4 @@ int stack_pop(stack_t *st);
 // pre: st != NULL, st is non-empty
 int stack_peek(stack_t *st);
 
-bool is_ordered_stack(stack_t *st);
+bool is_stack_ascending_order(stack_t *st);

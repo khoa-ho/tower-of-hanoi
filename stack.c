@@ -36,6 +36,6 @@ int stack_peek(stack_t *st) {
     return list_get(st, 0);
 }
 
-bool is_ordered_stack(stack_t *st) {
-    return is_ordered_list(st);
+bool is_stack_ascending_order(stack_t *st) {
+    return is_list_ascending_order(st);
 }
