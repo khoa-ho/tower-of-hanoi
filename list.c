@@ -70,7 +70,6 @@ void print_list(list_t *l) {
 
 int list_get(list_t *l, int index) {
     assert((list_size(l) > index) & (index >= 0));
-    int ret;
     node_t *cur = l->first;
     for (int i = 0; i < index; i++) {
         cur = cur->next;

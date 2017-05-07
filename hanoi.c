@@ -41,8 +41,8 @@ void move_disk(tower_t *src, tower_t *dest) {
 
 // Checks wheter the tower is complete (i.e. same size as the original
 // tower and disks are sorted in an ascending order)
-bool is_complete_tower(tower_t *src) {
-    return (stack_size(src) == NUM_DISKS) & is_stack_ascending_order(src);
+bool is_complete_tower(tower_t *src, int numDisks) {
+    return (stack_size(src) == numDisks) & is_stack_ascending_order(src);
 }
 
 // ============================================================================
@@ -53,10 +53,10 @@ typedef struct {
 } hanoi_t;
 
 // Makes a Tower of Hanoi game
-hanoi_t* make_hanoi(void) {
+hanoi_t* make_hanoi(int numDisks) {
     hanoi_t* ret = (hanoi_t*) malloc(sizeof(hanoi_t));
     tower_t* t0 = make_tower();
-    for (int i = NUM_DISKS; i > 0; i--) {
+    for (int i = numDisks; i > 0; i--) {
         stack_push(t0, i);
     }
     (ret->towers)[0] = t0;
@@ -68,7 +68,7 @@ hanoi_t* make_hanoi(void) {
 }
 
 // Frees a Tower of Hanoi game
-void free_hanoi(hanoi_t *game) {
+void free_hanoi(hanoi_t *game, int numDisks) {
     for (int i = 0; i < NUM_TOWERS; i++) {
         free_tower(game->towers[i]);
     }
@@ -77,10 +77,10 @@ void free_hanoi(hanoi_t *game) {
 
 // Checks wheter the game is won (i.e. a tower is complete, not
 // considering the original tower)
-bool is_won_game(hanoi_t *game) {
+bool is_won_game(hanoi_t *game, int numDisks) {
     bool ret = 0;
     for (int i = 1; i < NUM_TOWERS; i++) {
-        ret += is_complete_tower(game->towers[i]);
+      ret += is_complete_tower(game->towers[i], numDisks);
     }
     return ret;
 }
@@ -95,8 +95,8 @@ void print(char *str, int num) {
 }
 
 // Prints a disk of the given size
-void print_disk(int disk) {
-    int num_spcs = NUM_DISKS - disk;
+void print_disk(int disk, int numDisks) {
+    int num_spcs = numDisks - disk;
     print(" ", num_spcs);
     print("-", disk);
     printf("|");
@@ -105,27 +105,27 @@ void print_disk(int disk) {
 }
 
 // Prints the tower
-void print_tower(tower_t *t) {
+void print_tower(tower_t *t, int numDisks) {
     int num_disks = stack_size(t);
-    for (int i = 0; i < NUM_DISKS - num_disks; i++) {
-        print(" ", NUM_DISKS);
+    for (int i = 0; i < numDisks - num_disks; i++) {
+        print(" ", numDisks);
         printf("|");
-        print(" ", NUM_DISKS);
+        print(" ", numDisks);
         printf("\n");
     }
     for (int j = 0; j < num_disks; j++) {
-        print_disk(list_get(t, j));
+      print_disk(list_get(t, j), numDisks);
         printf("\n");
     }
-    print("=", 2 * NUM_DISKS + 1);
+    print("=", 2 * numDisks + 1);
 }
 
 // Prints the Tower of Hanoi game
-void print_hanoi(hanoi_t *game) {
-    printf("Move: %d\n", game->moves);
+void print_hanoi(hanoi_t *game, int numDisks) {
+  printf("Move: %d\n", game->moves);
     for (int i = 0; i < NUM_TOWERS; i++) {
         printf("Tower %d:\n", i);
-        print_tower(game->towers[i]);
+        print_tower(game->towers[i], numDisks);
         printf("\n");
     }
 }
@@ -133,11 +133,14 @@ void print_hanoi(hanoi_t *game) {
 // ============================================================================
 // Main function
 int main(void) {
+  int numDisks;
+  printf("Enter the number of disks: ");
+  scanf("%d", &numDisks);
     bool winning_game = false;
-    hanoi_t *game = make_hanoi();
+    hanoi_t *game = make_hanoi(numDisks);
     int src, dest;
     src = dest = 0;
-    print_hanoi(game);
+    print_hanoi(game, numDisks);
 
     while (!winning_game) {
         printf("Enter a source tower: ");
@@ -162,14 +165,14 @@ int main(void) {
             sleep(1);
         }
 
-        winning_game = is_won_game(game);
+        winning_game = is_won_game(game, numDisks);
         game->moves += 1;
-        print_hanoi(game);
+        print_hanoi(game, numDisks);
         printf("\n");
     }
 
     printf("You won in %d steps\n", game->moves);
-    free_hanoi(game);
+    free_hanoi(game, numDisks);
 
     return 0;
 }
