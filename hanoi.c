@@ -159,6 +159,7 @@ int main(void) {
             sleep(1);
         } else if (has_valid_move(game->towers[src], game->towers[dest])) {
             move_disk(game->towers[src], game->towers[dest]);
+            game->moves += 1;
         } else {
             printf("Invalid move between source and destination!\n");
             printf("\n");
@@ -166,7 +167,6 @@ int main(void) {
         }
 
         winning_game = is_won_game(game, numDisks);
-        game->moves += 1;
         print_hanoi(game, numDisks);
         printf("\n");
     }
